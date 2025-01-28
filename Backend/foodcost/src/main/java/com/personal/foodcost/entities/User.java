@@ -27,6 +27,9 @@ public class User {
     private String password;
 
     @Column
+    private String cellphone;
+
+    @Column
     private ROLES role;
 
     @ManyToOne

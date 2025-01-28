@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.MapKeyJavaType;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Table
@@ -22,7 +24,7 @@ public class Dish {
     private String name;
 
     @ManyToMany
-    private List<RawMaterial> rawMaterialList;
+    private List<RawMaterialPerDish> rawMaterialList;
 
     @Column
     private Double price;

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +14,39 @@ import java.util.List;
 public class DishRequestDTO {
 
     private String name;
-    private List<RawMaterial> rowMaterialList;
+    private List<Map<String, Float>> rowMaterialList;
     private Double price;
     private String description;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Map<String, Float>> getRowMaterialList() {
+        return rowMaterialList;
+    }
+
+    public void setRowMaterialList(List<Map<String, Float>> rowMaterialList) {
+        this.rowMaterialList = rowMaterialList;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

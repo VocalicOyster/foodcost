@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Table
 @NoArgsConstructor
 @AllArgsConstructor
-public class Restaurant {
+public class RawMaterialPerDish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,18 +20,8 @@ public class Restaurant {
     private String name;
 
     @Column
-    private String telephoneNumber;
+    private Float quantity;
 
     @Column
-    private String cellphone;
-
-    @Column
-    private String email;
-
-    @Column
-    private String pIva;
-
-    @Column
-    private String address;
-
+    private Double price;
 }

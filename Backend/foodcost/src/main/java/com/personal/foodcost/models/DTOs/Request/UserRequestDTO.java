@@ -18,7 +18,10 @@ public class UserRequestDTO {
     private String username;
 
     private String password;
+
     private String RepeatPass;
+
+    private String cellphone;
 
     private ROLES role;
 
