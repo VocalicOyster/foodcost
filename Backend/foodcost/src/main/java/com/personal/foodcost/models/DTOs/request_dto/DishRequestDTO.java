@@ -1,22 +1,30 @@
-package com.personal.foodcost.models.DTOs.Request;
+package com.personal.foodcost.models.DTOs.request_dto;
 
-import com.personal.foodcost.entities.RawMaterial;
+import com.personal.foodcost.entities.RawMaterialPerDish;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DishRequestDTO {
 
+    private Long id;
     private String name;
-    private List<Map<String, Float>> rowMaterialList;
+    private List<RawMaterialPerDish> rowMaterialList;
     private Double price;
     private String description;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -26,11 +34,11 @@ public class DishRequestDTO {
         this.name = name;
     }
 
-    public List<Map<String, Float>> getRowMaterialList() {
+    public List<RawMaterialPerDish> getRowMaterialList() {
         return rowMaterialList;
     }
 
-    public void setRowMaterialList(List<Map<String, Float>> rowMaterialList) {
+    public void setRowMaterialList(List<RawMaterialPerDish> rowMaterialList) {
         this.rowMaterialList = rowMaterialList;
     }
 

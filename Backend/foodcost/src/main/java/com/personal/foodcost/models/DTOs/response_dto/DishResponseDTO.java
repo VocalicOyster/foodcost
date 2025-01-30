@@ -1,35 +1,17 @@
-package com.personal.foodcost.entities;
+package com.personal.foodcost.models.DTOs.response_dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.MapKeyJavaType;
-
-import java.util.List;
-import java.util.Map;
 
 @Data
-@Table
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dish {
+public class DishResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
     private String name;
-
-    @ManyToMany
-    private List<RawMaterialPerDish> rawMaterialList;
-
-    @Column
     private Double price;
-
-    @Column
     private String description;
 
     public Long getId() {
@@ -46,14 +28,6 @@ public class Dish {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<RawMaterialPerDish> getRawMaterialList() {
-        return rawMaterialList;
-    }
-
-    public void setRawMaterialList(List<RawMaterialPerDish> rawMaterialList) {
-        this.rawMaterialList = rawMaterialList;
     }
 
     public Double getPrice() {

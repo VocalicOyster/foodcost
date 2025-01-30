@@ -2,7 +2,7 @@ package com.personal.foodcost.validators;
 
 import com.personal.foodcost.entities.User;
 import com.personal.foodcost.exceptions.UserException;
-import com.personal.foodcost.models.DTOs.Request.UserRequestDTO;
+import com.personal.foodcost.models.DTOs.request_dto.UserRequestDTO;
 import com.personal.foodcost.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,14 @@ public class UserValidator {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean isUserValid(UserRequestDTO userRequestDTO) {
-
+    public boolean isUserValid(UserRequestDTO userRequestDTO) throws UserException {
+        try {
+          return isUserNotNull(userRequestDTO) &&
+                 isPasswordValid(userRequestDTO) &&
+                 isUsernameNotInDatabase(userRequestDTO);
+        } catch (UserException e) {
+            throw new UserException(e.getMessage(), 400);
+        }
     }
 
     private boolean isUserNotNull(UserRequestDTO userRequestDTO) throws UserException {
@@ -40,8 +46,17 @@ public class UserValidator {
         else throw new UserException("User with this username already in database", 400);
     }
 
-    private boolean isPasswordValid(UserRequestDTO userRequestDTO) {
-        Pattern pattern = Pattern.compile("^( ?=.*[a-z]{7,}) (?=.*[A-Z]) (?=.*[!@.$%^#?&*]) (?=.*\\d).{10,}$");
+    private boolean isPasswordValid(UserRequestDTO userRequestDTO) throws UserException {
+        Pattern pattern = Pattern.compile("^(?=.*[A-Z]) (?=.*[!@.$%^#?&*]) (?=.*\\d).{10,}$");
         Matcher matcher = pattern.matcher(userRequestDTO.getPassword());
+        if(matcher.matches()) {
+            return true;
+        } else throw new UserException("Password is not valid", 400);
+    }
+
+    private boolean equalsPasswords(UserRequestDTO userRequestDTO) throws UserException {
+        if(userRequestDTO.getPassword().equals(userRequestDTO.getRepeatPass())) {
+            return true;
+        } else throw new UserException("Passwords do not match", 400);
     }
 }

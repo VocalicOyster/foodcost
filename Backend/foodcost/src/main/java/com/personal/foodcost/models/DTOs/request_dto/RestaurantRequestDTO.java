@@ -1,6 +1,5 @@
-package com.personal.foodcost.models.DTOs.Request;
+package com.personal.foodcost.models.DTOs.request_dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,12 +9,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RestaurantRequestDTO {
 
+    private Long id;
     private String name;
     private String telephoneNumber;
     private String cellphone;
     private String email;
     private String pIva;
     private String address;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

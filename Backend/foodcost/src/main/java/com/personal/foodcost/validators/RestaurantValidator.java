@@ -2,7 +2,7 @@ package com.personal.foodcost.validators;
 
 import com.personal.foodcost.entities.Restaurant;
 import com.personal.foodcost.exceptions.RestaurantException;
-import com.personal.foodcost.models.DTOs.Request.RestaurantRequestDTO;
+import com.personal.foodcost.models.DTOs.request_dto.RestaurantRequestDTO;
 import com.personal.foodcost.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

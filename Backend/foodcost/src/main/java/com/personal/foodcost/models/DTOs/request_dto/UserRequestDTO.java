@@ -1,9 +1,7 @@
-package com.personal.foodcost.models.DTOs.Request;
+package com.personal.foodcost.models.DTOs.request_dto;
 
 import com.personal.foodcost.entities.Restaurant;
 import com.personal.foodcost.models.DTOs.ROLES;
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDTO {
+
+    private Long id;
 
     private String name;
 
@@ -26,6 +26,14 @@ public class UserRequestDTO {
     private ROLES role;
 
     private Restaurant restaurant;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
