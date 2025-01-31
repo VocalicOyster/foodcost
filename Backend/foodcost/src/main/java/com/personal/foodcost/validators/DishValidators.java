@@ -29,7 +29,7 @@ public class DishValidators {
     private boolean isDishNotNull(DishRequestDTO dishRequestDTO) throws DishException {
         if(!Objects.equals(dishRequestDTO.getName(), "") &&
                 dishRequestDTO.getPrice() != null &&
-                !dishRequestDTO.getRowMaterialList().isEmpty()) {
+                dishRequestDTO.getIngredientList() != null) {
             return true;
         } else throw new DishException("Something missing...", 400);
     }

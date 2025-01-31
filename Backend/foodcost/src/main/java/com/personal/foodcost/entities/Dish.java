@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.MapKeyJavaType;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Table
@@ -23,14 +21,14 @@ public class Dish {
     @Column
     private String name;
 
+    @Column
+    private String description;
+
     @ManyToMany
-    private List<RawMaterialPerDish> rawMaterialList;
+    private List<Ingredient> ingredientList;
 
     @Column
     private Double price;
-
-    @Column
-    private String description;
 
     public Long getId() {
         return id;
@@ -48,12 +46,20 @@ public class Dish {
         this.name = name;
     }
 
-    public List<RawMaterialPerDish> getRawMaterialList() {
-        return rawMaterialList;
+    public String getDescription() {
+        return description;
     }
 
-    public void setRawMaterialList(List<RawMaterialPerDish> rawMaterialList) {
-        this.rawMaterialList = rawMaterialList;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Ingredient> getIngredientList() {
+        return ingredientList;
+    }
+
+    public void setIngredientList(List<Ingredient> ingredientList) {
+        this.ingredientList = ingredientList;
     }
 
     public Double getPrice() {
@@ -62,13 +68,5 @@ public class Dish {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

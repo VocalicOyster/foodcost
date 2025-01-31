@@ -1,4 +1,4 @@
-package com.personal.foodcost.models.DTOs.response_dto;
+package com.personal.foodcost.models.DTOs.request_dto;
 
 import com.personal.foodcost.entities.RawMaterial;
 import lombok.*;
@@ -6,14 +6,12 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RawMaterialResponseDTO {
+public class IngredientRequestDTO {
 
     private Long id;
-    private String name;
-
-    //in Kg
+    private RawMaterial rawMaterial;
     private Float quantity;
-    private Double price;
+
 
     public Long getId() {
         return id;
@@ -23,12 +21,12 @@ public class RawMaterialResponseDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public RawMaterial getRawMaterial() {
+        return rawMaterial;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRawMaterial(RawMaterial rawMaterial) {
+        this.rawMaterial = rawMaterial;
     }
 
     public Float getQuantity() {
@@ -37,13 +35,5 @@ public class RawMaterialResponseDTO {
 
     public void setQuantity(Float quantity) {
         this.quantity = quantity;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 }

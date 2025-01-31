@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Entity
 @Table
 @NoArgsConstructor
@@ -31,6 +30,8 @@ public class RawMaterial {
 
     @Column
     private String description;
+
+
 
     public Long getId() {
         return id;

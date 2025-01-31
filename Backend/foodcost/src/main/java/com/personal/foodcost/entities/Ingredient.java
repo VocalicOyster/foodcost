@@ -1,18 +1,27 @@
-package com.personal.foodcost.models.DTOs.request_dto;
+package com.personal.foodcost.entities;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Entity
+@Table
 @NoArgsConstructor
 @AllArgsConstructor
-public class RawMaterialPerDishRequestDTO {
+public class Ingredient {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+
+    @ManyToOne
+    private RawMaterial rawMaterial;
+
+    @Column
     private Float quantity;
-    private Float price;
+
 
     public Long getId() {
         return id;
@@ -22,12 +31,12 @@ public class RawMaterialPerDishRequestDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public RawMaterial getRawMaterial() {
+        return rawMaterial;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRawMaterial(RawMaterial rawMaterial) {
+        this.rawMaterial = rawMaterial;
     }
 
     public Float getQuantity() {
@@ -36,13 +45,5 @@ public class RawMaterialPerDishRequestDTO {
 
     public void setQuantity(Float quantity) {
         this.quantity = quantity;
-    }
-
-    public Float getPrice() {
-        return price;
-    }
-
-    public void setPrice(Float price) {
-        this.price = price;
     }
 }

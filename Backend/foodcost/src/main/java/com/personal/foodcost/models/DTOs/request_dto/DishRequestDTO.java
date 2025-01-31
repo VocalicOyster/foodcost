@@ -1,9 +1,7 @@
 package com.personal.foodcost.models.DTOs.request_dto;
 
-import com.personal.foodcost.entities.RawMaterialPerDish;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.personal.foodcost.entities.Ingredient;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,9 +12,10 @@ public class DishRequestDTO {
 
     private Long id;
     private String name;
-    private List<RawMaterialPerDish> rowMaterialList;
-    private Double price;
     private String description;
+    private List<IngredientRequestDTO> ingredientList;
+    private Double price;
+
 
     public Long getId() {
         return id;
@@ -34,12 +33,12 @@ public class DishRequestDTO {
         this.name = name;
     }
 
-    public List<RawMaterialPerDish> getRowMaterialList() {
-        return rowMaterialList;
+    public List<IngredientRequestDTO> getIngredientList() {
+        return ingredientList;
     }
 
-    public void setRowMaterialList(List<RawMaterialPerDish> rowMaterialList) {
-        this.rowMaterialList = rowMaterialList;
+    public void setIngredientList(List<IngredientRequestDTO> ingredientList) {
+        this.ingredientList = ingredientList;
     }
 
     public Double getPrice() {
