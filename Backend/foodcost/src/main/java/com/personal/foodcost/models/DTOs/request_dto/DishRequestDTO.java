@@ -1,34 +1,21 @@
-package com.personal.foodcost.entities;
+package com.personal.foodcost.models.DTOs.request_dto;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.personal.foodcost.entities.Ingredient;
+import lombok.*;
 
 import java.util.List;
 
 @Data
-@Table
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dish {
+public class DishRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
     private String name;
-
-    @Column
     private String description;
-
-    @ManyToMany
-    private List<Ingredient> ingredientList;
-
-    @Column
+    private List<IngredientRequestDTO> ingredientList;
     private Double price;
+
 
     public Long getId() {
         return id;
@@ -46,19 +33,11 @@ public class Dish {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<Ingredient> getIngredientList() {
+    public List<IngredientRequestDTO> getIngredientList() {
         return ingredientList;
     }
 
-    public void setIngredientList(List<Ingredient> ingredientList) {
+    public void setIngredientList(List<IngredientRequestDTO> ingredientList) {
         this.ingredientList = ingredientList;
     }
 
@@ -68,5 +47,13 @@ public class Dish {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

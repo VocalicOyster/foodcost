@@ -1,37 +1,21 @@
-package com.personal.foodcost.entities;
+package com.personal.foodcost.models.DTOs.request_dto;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Entity
-@Table
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RawMaterial {
+public class RawMaterialRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
     private String name;
 
     //in Kg
-    @Column
     private Float quantity;
 
-    @Column
     private Double price;
-
-    @Column
     private String vendor;
-
-    @Column
     private String description;
-
-
 
     public Long getId() {
         return id;

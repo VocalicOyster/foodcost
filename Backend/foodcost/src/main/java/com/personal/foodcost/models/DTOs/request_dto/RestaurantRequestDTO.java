@@ -1,37 +1,20 @@
-package com.personal.foodcost.entities;
+package com.personal.foodcost.models.DTOs.request_dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
-@Table
 @NoArgsConstructor
 @AllArgsConstructor
-public class Restaurant {
+public class RestaurantRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
     private String name;
-
-    @Column
     private String telephoneNumber;
-
-    @Column
     private String cellphone;
-
-    @Column
     private String email;
-
-    @Column
     private String pIva;
-
-    @Column
     private String address;
 
     public Long getId() {

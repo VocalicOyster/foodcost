@@ -1,40 +1,31 @@
-package com.personal.foodcost.entities;
+package com.personal.foodcost.models.DTOs.request_dto;
 
+import com.personal.foodcost.entities.Restaurant;
 import com.personal.foodcost.models.DTOs.ROLES;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
-@Table
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class UserRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private String name;
 
-    @Column
     private String username;
 
-    @Column
     private String password;
 
-    @Column
+    private String RepeatPass;
+
     private String cellphone;
 
-    @Column
     private ROLES role;
 
-    @ManyToOne
     private Restaurant restaurant;
-
 
     public Long getId() {
         return id;
@@ -66,6 +57,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRepeatPass() {
+        return RepeatPass;
+    }
+
+    public void setRepeatPass(String repeatPass) {
+        RepeatPass = repeatPass;
     }
 
     public String getCellphone() {

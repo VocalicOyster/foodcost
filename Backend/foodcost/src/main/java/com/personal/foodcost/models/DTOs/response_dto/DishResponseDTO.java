@@ -1,37 +1,18 @@
-package com.personal.foodcost.entities;
+package com.personal.foodcost.models.DTOs.response_dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RawMaterial {
+public class DishResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
     private String name;
-
-    //in Kg
-    @Column
-    private Float quantity;
-
-    @Column
     private Double price;
-
-    @Column
-    private String vendor;
-
-    @Column
     private String description;
-
-
 
     public Long getId() {
         return id;
@@ -49,28 +30,12 @@ public class RawMaterial {
         this.name = name;
     }
 
-    public Float getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Float quantity) {
-        this.quantity = quantity;
-    }
-
     public Double getPrice() {
         return price;
     }
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public String getVendor() {
-        return vendor;
-    }
-
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
     }
 
     public String getDescription() {
