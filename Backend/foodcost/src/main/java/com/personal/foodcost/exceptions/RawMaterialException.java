@@ -8,4 +8,8 @@ public class RawMaterialException extends Exception{
         super(message);
         this.statusCode = statusCode;
     }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
 }
