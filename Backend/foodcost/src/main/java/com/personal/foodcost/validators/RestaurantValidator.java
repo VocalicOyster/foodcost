@@ -71,7 +71,7 @@ public class RestaurantValidator {
         return matcher.matches();
     }
 
-    public boolean isEmailValid(RestaurantRequestDTO restaurantRequestDTO) throws RestaurantException {
+    private boolean isEmailValid(RestaurantRequestDTO restaurantRequestDTO) throws RestaurantException {
         Pattern pattern = Pattern.compile("[a-zA-Z.0-9]+@+[a-zA-Z.].[a-z]{2,6}");
         Matcher matcher = pattern.matcher(restaurantRequestDTO.getEmail());
         if (matcher.matches()) {

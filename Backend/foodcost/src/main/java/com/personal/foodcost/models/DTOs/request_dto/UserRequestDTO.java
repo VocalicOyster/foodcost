@@ -19,7 +19,7 @@ public class UserRequestDTO {
 
     private String password;
 
-    private String RepeatPass;
+    private String repeatPass;
 
     private String cellphone;
 
@@ -60,11 +60,11 @@ public class UserRequestDTO {
     }
 
     public String getRepeatPass() {
-        return RepeatPass;
+        return repeatPass;
     }
 
     public void setRepeatPass(String repeatPass) {
-        RepeatPass = repeatPass;
+        repeatPass = repeatPass;
     }
 
     public String getCellphone() {

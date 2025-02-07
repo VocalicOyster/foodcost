@@ -6,7 +6,7 @@ import com.personal.foodcost.models.DTOs.ResponseInvalid;
 import com.personal.foodcost.models.DTOs.ResponseValid;
 import com.personal.foodcost.models.DTOs.request_dto.RawMaterialRequestDTO;
 import com.personal.foodcost.models.DTOs.response_dto.RawMaterialResponseDTO;
-import com.personal.foodcost.models.DTOs.response_dto.ResponseValidNoData;
+import com.personal.foodcost.models.DTOs.ResponseValidNoData;
 import com.personal.foodcost.services.RawMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class RawMaterialController {
     @Autowired
     private RawMaterialService rawMaterialService;
 
-    @GetMapping
+    @GetMapping //TUTTI
     public ResponseEntity<Response> getAllRaw() {
         List<RawMaterialResponseDTO> rawMaterialResponseDTOList = rawMaterialService.getAllRaw();
 
@@ -44,7 +44,7 @@ public class RawMaterialController {
         );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //TUTTI
     public ResponseEntity<Response> getRawById(@PathVariable Long id) {
         try {
             RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.getRawById(id);
@@ -65,7 +65,7 @@ public class RawMaterialController {
         }
     }
 
-    @PostMapping
+    @PostMapping //OWNER E ADMIN
     public ResponseEntity<Response> insertRaw(@RequestBody RawMaterialRequestDTO rawMaterialRequestDTO) {
         try {
             RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.insertRaw(rawMaterialRequestDTO);
@@ -86,7 +86,7 @@ public class RawMaterialController {
         }
     }
 
-    @PutMapping
+    @PutMapping //OWNER E ADMIN
     public ResponseEntity<Response> updateById(@PathVariable Long id, @RequestBody RawMaterialRequestDTO rawMaterialRequestDTO) {
         try {
             RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.updateById(id, rawMaterialRequestDTO);
@@ -108,7 +108,7 @@ public class RawMaterialController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping //OWNER E ADMIN
     public ResponseEntity<Response> deleteById(@PathVariable Long id) {
         try {
             RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.deleteById(id);
