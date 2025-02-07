@@ -7,7 +7,7 @@ import com.personal.foodcost.models.DTOs.ResponseInvalid;
 import com.personal.foodcost.models.DTOs.ResponseValid;
 import com.personal.foodcost.models.DTOs.request_dto.DishRequestDTO;
 import com.personal.foodcost.models.DTOs.response_dto.DishResponseDTO;
-import com.personal.foodcost.models.DTOs.response_dto.ResponseValidNoData;
+import com.personal.foodcost.models.DTOs.ResponseValidNoData;
 import com.personal.foodcost.services.DishServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class DishController {
     @Autowired
     private DishServices dishServices;
 
-    @PostMapping
+    @PostMapping //ADMIN e OWNER
     public ResponseEntity<Response> insertDish(@RequestBody DishRequestDTO dishRequestDTO) {
         try {
             DishResponseDTO dishResponseDTO = dishServices.insertDish(dishRequestDTO);
@@ -45,7 +45,7 @@ public class DishController {
         }
     }
 
-    @GetMapping
+    @GetMapping //TUTTI
     public ResponseEntity<Response> getAllDishes() {
         List<DishResponseDTO> dishResponseDTOList = dishServices.getAllDishes();
         if(dishResponseDTOList.isEmpty()) {
@@ -66,7 +66,7 @@ public class DishController {
         );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //TUTTI
     public ResponseEntity<Response> getDishById(@PathVariable Long id) {
         try {
             DishResponseDTO dishResponseDTO = dishServices.getDishById(id);
@@ -88,7 +88,7 @@ public class DishController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}") //ADMIN E OWNER
     public ResponseEntity<Response> updateDishById(@PathVariable Long id, @RequestBody DishRequestDTO dishRequestDTO) {
         try {
             DishResponseDTO dishResponseDTO = dishServices.updateDishById(id, dishRequestDTO);
@@ -110,7 +110,7 @@ public class DishController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") //ADMIN e OWNER
     public ResponseEntity<Response> deleteDishById(@PathVariable Long id) {
         try {
             DishResponseDTO dishResponseDTO = dishServices.deleteDishById(id);

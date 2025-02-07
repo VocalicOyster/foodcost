@@ -6,7 +6,7 @@ import com.personal.foodcost.models.DTOs.ResponseInvalid;
 import com.personal.foodcost.models.DTOs.ResponseValid;
 import com.personal.foodcost.models.DTOs.request_dto.IngredientRequestDTO;
 import com.personal.foodcost.models.DTOs.response_dto.IngredientResponseDTO;
-import com.personal.foodcost.models.DTOs.response_dto.ResponseValidNoData;
+import com.personal.foodcost.models.DTOs.ResponseValidNoData;
 import com.personal.foodcost.services.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class IngredientController {
     @Autowired
     private IngredientService ingredientService;
 
-    @GetMapping
+    @GetMapping //TUTTI
     public ResponseEntity<Response> getAllIngredients() {
         List<IngredientResponseDTO> ingredientResponseDTOList = ingredientService.getAllIngredients();
         if(ingredientResponseDTOList.isEmpty()) {
@@ -43,7 +43,7 @@ public class IngredientController {
         );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //TUTTI
     public ResponseEntity<Response> getIngredientById(@PathVariable Long id) {
         try {
             IngredientResponseDTO ingredientResponseDTO = ingredientService.getIngredientById(id);
@@ -64,7 +64,7 @@ public class IngredientController {
         }
     }
 
-    @PostMapping
+    @PostMapping //ADMIN E OWNER
     public ResponseEntity<Response> insertIngredient(@RequestBody IngredientRequestDTO ingredientRequestDTO) {
         try {
             IngredientResponseDTO ingredientResponseDTO = ingredientService.insertIngredient(ingredientRequestDTO);
@@ -85,7 +85,7 @@ public class IngredientController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}") //ADMIN E OWNER
     public ResponseEntity<Response> updateIngredientById(@PathVariable Long id, @RequestBody IngredientRequestDTO ingredientRequestDTO) {
         try {
             IngredientResponseDTO ingredientResponseDTO = ingredientService.updateIngredientById(id, ingredientRequestDTO);
@@ -106,7 +106,7 @@ public class IngredientController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") //ADMIN E OWNER
     public ResponseEntity<Response> deleteIngredientById(@PathVariable Long id) {
         try {
             IngredientResponseDTO ingredientResponseDTO = ingredientService.deleteIngredientById(id);

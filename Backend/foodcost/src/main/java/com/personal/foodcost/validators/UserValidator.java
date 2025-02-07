@@ -1,6 +1,6 @@
 package com.personal.foodcost.validators;
 
-import com.personal.foodcost.entities.User;
+import com.personal.foodcost.entities.MyUser;
 import com.personal.foodcost.exceptions.UserException;
 import com.personal.foodcost.models.DTOs.request_dto.UserRequestDTO;
 import com.personal.foodcost.repositories.UserRepository;
@@ -40,14 +40,14 @@ public class UserValidator {
     }
 
     private boolean isUsernameNotInDatabase(UserRequestDTO userRequestDTO) throws UserException {
-        User user = userRepository.findByUsername(userRequestDTO.getUsername()).orElse(null);
+        MyUser myUser = userRepository.findByUsername(userRequestDTO.getUsername()).orElse(null);
 
-        if (user == null) return true;
+        if (myUser == null) return true;
         else throw new UserException("User with this username already in database", 400);
     }
 
     private boolean isPasswordValid(UserRequestDTO userRequestDTO) throws UserException {
-        Pattern pattern = Pattern.compile("^(?=.*[A-Z]) (?=.*[!@.$%^#?&*]) (?=.*\\d).{10,}$");
+        Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*[!@.$%^#?&*])(?=.*\\d).{10,}$");
         Matcher matcher = pattern.matcher(userRequestDTO.getPassword());
         if(matcher.matches()) {
             return true;

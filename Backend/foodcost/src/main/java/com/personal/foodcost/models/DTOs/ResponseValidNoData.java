@@ -1,6 +1,4 @@
-package com.personal.foodcost.models.DTOs.response_dto;
-
-import com.personal.foodcost.models.DTOs.Response;
+package com.personal.foodcost.models.DTOs;
 
 public class ResponseValidNoData extends Response {
 
