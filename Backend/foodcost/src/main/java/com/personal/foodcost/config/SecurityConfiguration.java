@@ -36,6 +36,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers("/auth/login").permitAll();
                     registry.requestMatchers("/api/user/**").hasRole(ROLES.ADMIN.toString());
+                    registry.requestMatchers("/auth/restaurantRes").hasRole(ROLES.ADMIN.toString());
+                    registry.requestMatchers("/auth/employeeRes").hasAnyRole(ROLES.ADMIN.toString(), ROLES.OWNER.toString());
+
 
                     //restaurant permissions
                     registry
