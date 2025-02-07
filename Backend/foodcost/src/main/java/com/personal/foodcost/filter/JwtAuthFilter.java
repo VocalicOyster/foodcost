@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Configuration
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -28,12 +29,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private MyUserDetailService myUserDetailService;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
+            if(Objects.equals(request.getRequestURI(), "/auth/login")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             String jwt = parseJwt(request);
 
 
-            if (jwt == null) {
+            if (jwt == null && !Objects.equals(request.getRequestURI(), "/auth/login")) {
                 response.setStatus(403);
                 response.setContentType("application/json");
                 response.getWriter().write("Auth Error: MISSING TOKEN");
@@ -58,6 +63,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             response.setStatus(403);
             response.setContentType("application/json");
             response.getWriter().write("Auth Error: INVALID TOKEN");
+            System.out.println(e.getLocalizedMessage());
         }
     }
 

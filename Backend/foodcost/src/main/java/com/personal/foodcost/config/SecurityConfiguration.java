@@ -34,9 +34,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/auth/login").permitAll();
                     registry.requestMatchers("/api/user/**").hasRole(ROLES.ADMIN.toString());
                     registry.requestMatchers("/auth/restaurantRes").hasRole(ROLES.ADMIN.toString());
+                    registry.requestMatchers("/auth/ownerRes").hasRole(ROLES.ADMIN.toString());
                     registry.requestMatchers("/auth/employeeRes").hasAnyRole(ROLES.ADMIN.toString(), ROLES.OWNER.toString());
 
 
@@ -55,27 +55,33 @@ public class SecurityConfiguration {
 
 
                     //dish permissions
-                    registry
-                            .requestMatchers(HttpMethod.GET, "/api/dish/**")
-                            .hasRole(ROLES.EMPLOYEE.toString());
-                    registry.requestMatchers("/api/dish/**").hasAnyRole(ROLES.ADMIN.toString(), ROLES.OWNER.toString());
+                    registry.requestMatchers(HttpMethod.GET, "/api/dish/**")
+                            .hasAnyRole(ROLES.EMPLOYEE.toString(), ROLES.ADMIN.toString(), ROLES.OWNER.toString());
+                    registry.requestMatchers("/api/dish/**")
+                            .hasAnyRole(ROLES.ADMIN.toString(), ROLES.OWNER.toString());
 
                     //ingredient permissions
-                    registry.requestMatchers(HttpMethod.GET,"/api/ingredient/**")
-                            .hasRole(ROLES.EMPLOYEE.toString());
+                    registry.requestMatchers(HttpMethod.GET, "/api/ingredient/**")
+                            .hasAnyRole(ROLES.EMPLOYEE.toString(), ROLES.ADMIN.toString(), ROLES.OWNER.toString());
 
                     registry.requestMatchers("/api/ingredient/**")
                             .hasAnyRole(ROLES.ADMIN.toString(), ROLES.OWNER.toString());
 
                     //raw material permissions
-                    registry.requestMatchers(HttpMethod.GET,"/api/raw/**")
-                            .hasRole(ROLES.EMPLOYEE.toString());
+                    registry.requestMatchers(HttpMethod.GET, "/api/raw/**")
+                            .hasAnyRole(ROLES.EMPLOYEE.toString(), ROLES.ADMIN.toString(), ROLES.OWNER.toString());
                     registry.requestMatchers("/api/raw/**")
                             .hasAnyRole(ROLES.ADMIN.toString(), ROLES.OWNER.toString());
 
-                    registry.anyRequest().authenticated();
-
+                    registry.requestMatchers("/auth/login").permitAll();
                 })
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                        {
+                            response.setStatus(401);
+                            response.setContentType("application/json");
+                            response.getWriter().write("You do not have enough permission to access this endpoint");
+                        }))
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
