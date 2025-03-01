@@ -2,8 +2,11 @@ package com.personal.foodcost.validators;
 
 import com.personal.foodcost.entities.Dish;
 import com.personal.foodcost.exceptions.DishException;
+import com.personal.foodcost.filter.JwtAuthFilter;
 import com.personal.foodcost.models.DTOs.request_dto.DishRequestDTO;
 import com.personal.foodcost.repositories.DishRepository;
+import com.personal.foodcost.services.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +18,17 @@ public class DishValidators {
     @Autowired
     private DishRepository dishRepository;
 
-    public boolean isDishValid(DishRequestDTO dishRequestDTO) throws DishException {
+    @Autowired
+    private JwtAuthFilter jwtAuthFilter;
+
+    @Autowired
+    private JwtService jwtService;
+
+    public boolean isDishValid(DishRequestDTO dishRequestDTO, String jwt) throws DishException {
         try {
             return isDishNotNull(dishRequestDTO) &&
                     isPriceValid(dishRequestDTO) &&
-                    isNotInDatabase(dishRequestDTO);
+                    isNotInDatabase(dishRequestDTO, jwt);
         }
         catch (DishException e) {
             throw new DishException(e.getMessage(), 400);
@@ -40,8 +49,9 @@ public class DishValidators {
         } else throw new DishException("Price is not valid", 400);
     }
 
-    private boolean isNotInDatabase(DishRequestDTO dishRequestDTO) throws DishException {
-        Dish dish = dishRepository.findByName(dishRequestDTO.getName()).orElse(null);
+    private boolean isNotInDatabase(DishRequestDTO dishRequestDTO, String jwt) throws DishException {
+        String restName = jwtService.extractRestName(jwt);
+        Dish dish = dishRepository.findByName(dishRequestDTO.getName(), restName).orElse(null);
         if(dish == null) return true;
         else throw new DishException("Dish is already in database", 400);
     }

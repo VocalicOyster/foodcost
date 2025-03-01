@@ -35,6 +35,16 @@ public class MyUser {
     @ManyToOne
     private Restaurant restaurant;
 
+    @Column
+    private Boolean firstLogin;
+
+    public Boolean isFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(Boolean firstLogin) {
+        this.firstLogin = firstLogin;
+    }
 
     public Long getId() {
         return id;

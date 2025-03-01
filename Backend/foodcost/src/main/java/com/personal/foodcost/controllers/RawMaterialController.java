@@ -1,6 +1,7 @@
 package com.personal.foodcost.controllers;
 
 import com.personal.foodcost.exceptions.RawMaterialException;
+import com.personal.foodcost.filter.JwtAuthFilter;
 import com.personal.foodcost.models.DTOs.Response;
 import com.personal.foodcost.models.DTOs.ResponseInvalid;
 import com.personal.foodcost.models.DTOs.ResponseValid;
@@ -8,6 +9,7 @@ import com.personal.foodcost.models.DTOs.request_dto.RawMaterialRequestDTO;
 import com.personal.foodcost.models.DTOs.response_dto.RawMaterialResponseDTO;
 import com.personal.foodcost.models.DTOs.ResponseValidNoData;
 import com.personal.foodcost.services.RawMaterialService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,9 +24,13 @@ public class RawMaterialController {
     @Autowired
     private RawMaterialService rawMaterialService;
 
+    @Autowired
+    private JwtAuthFilter jwtAuthFilter;
+
     @GetMapping //TUTTI
-    public ResponseEntity<Response> getAllRaw() {
-        List<RawMaterialResponseDTO> rawMaterialResponseDTOList = rawMaterialService.getAllRaw();
+    public ResponseEntity<Response> getAllRaw(HttpServletRequest request) {
+        String jwt = jwtAuthFilter.parseJwt(request);
+        List<RawMaterialResponseDTO> rawMaterialResponseDTOList = rawMaterialService.getAllRaw(jwt);
 
         if (rawMaterialResponseDTOList.isEmpty()) {
             return ResponseEntity.status(204).body(
@@ -45,9 +51,11 @@ public class RawMaterialController {
     }
 
     @GetMapping("/{id}") //TUTTI
-    public ResponseEntity<Response> getRawById(@PathVariable Long id) {
+    public ResponseEntity<Response> getRawById(@PathVariable Long id, HttpServletRequest request) {
+        String jwt = jwtAuthFilter.parseJwt(request);
+
         try {
-            RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.getRawById(id);
+            RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.getRawById(id, jwt);
             return ResponseEntity.ok().body(
                     new ResponseValid(
                             200,
@@ -66,9 +74,12 @@ public class RawMaterialController {
     }
 
     @PostMapping //OWNER E ADMIN
-    public ResponseEntity<Response> insertRaw(@RequestBody RawMaterialRequestDTO rawMaterialRequestDTO) {
+    public ResponseEntity<Response> insertRaw(@RequestBody RawMaterialRequestDTO rawMaterialRequestDTO, HttpServletRequest request) {
+
+        String jwt = jwtAuthFilter.parseJwt(request);
+
         try {
-            RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.insertRaw(rawMaterialRequestDTO);
+            RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.insertRaw(rawMaterialRequestDTO, jwt);
             return ResponseEntity.ok().body(
                     new ResponseValid(
                             200,
@@ -87,9 +98,12 @@ public class RawMaterialController {
     }
 
     @PutMapping //OWNER E ADMIN
-    public ResponseEntity<Response> updateById(@PathVariable Long id, @RequestBody RawMaterialRequestDTO rawMaterialRequestDTO) {
+    public ResponseEntity<Response> updateById(@PathVariable Long id, @RequestBody RawMaterialRequestDTO rawMaterialRequestDTO, HttpServletRequest request) {
+
+        String jwt = jwtAuthFilter.parseJwt(request);
+
         try {
-            RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.updateById(id, rawMaterialRequestDTO);
+            RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.updateById(id, rawMaterialRequestDTO, jwt);
 
             return ResponseEntity.ok().body(
                     new ResponseValid(
@@ -109,9 +123,12 @@ public class RawMaterialController {
     }
 
     @DeleteMapping //OWNER E ADMIN
-    public ResponseEntity<Response> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Response> deleteById(@PathVariable Long id, HttpServletRequest request) {
+
+        String jwt = jwtAuthFilter.parseJwt(request);
+
         try {
-            RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.deleteById(id);
+            RawMaterialResponseDTO rawMaterialResponseDTO = rawMaterialService.deleteById(id, jwt);
 
             return ResponseEntity.ok().body(
                     new ResponseValid(

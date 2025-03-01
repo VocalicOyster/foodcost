@@ -6,12 +6,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
-    @Query("SELECT i FROM Ingredient i WHERE i.quantity = :quantity")
-    Optional<Ingredient> findByQuantity(@Param("quantity") Float quantity);
+    @Query("SELECT i FROM Ingredient i WHERE i.quantity = :quantity AND i.restName = :restName")
+    Optional<Ingredient> findByQuantity(@Param("quantity") Float quantity, @Param("restName") String restName);
+
+    @Query("SELECT i FROM Ingredient i WHERE i.restName = :restName")
+    List<Ingredient> findAll(@Param("restName") String restName);
+
+    @Query("SELECT i FROM Ingredient i WHERE i.id = :id AND i.restName = :restName")
+    Optional<Ingredient> findById(@Param("id") Long id, @Param("restName") String restName);
 
 }

@@ -14,6 +14,7 @@ import com.personal.foodcost.repositories.DishRepository;
 import com.personal.foodcost.repositories.IngredientRepository;
 import com.personal.foodcost.validators.DishValidators;
 import com.personal.foodcost.validators.IngredientValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,11 @@ public class DishServices {
     @Autowired
     private IngredientRepository ingredientRepository;
 
-    public DishResponseDTO insertDish(DishRequestDTO dishRequestDTO) throws DishException, IngredientException {
+    @Autowired
+    private JwtService jwtService;
+
+    public DishResponseDTO insertDish(DishRequestDTO dishRequestDTO, String jwt) throws DishException, IngredientException {
+        String restName = jwtService.extractRestName(jwt);
         try {
             for(IngredientRequestDTO ingredientRequestDTO : dishRequestDTO.getIngredientList()) {
                 ingredientValidator.isRawMaterialPerDishValid(ingredientRequestDTO);
@@ -54,10 +59,11 @@ public class DishServices {
                 list.add(ingredientRepository.saveAndFlush(ingredient));
             }
 
-            dishValidators.isDishValid(dishRequestDTO);
+            dishValidators.isDishValid(dishRequestDTO, jwt);
 
             Dish dish = dishMapper.dtoToEntity(dishRequestDTO);
             dish.setIngredientList(list);
+            dish.setRestName(restName);
             Dish savedDish = dishRepository.saveAndFlush(dish);
             return dishMapper.entityToDto(savedDish);
 
@@ -68,12 +74,11 @@ public class DishServices {
         }
     }
 
-    public List<DishResponseDTO> getAllDishes() {
-        List<Dish> dishList = dishRepository.findAll();
-        IngredientResponseDTO ingredientResponseDTO = new IngredientResponseDTO();
+    public List<DishResponseDTO> getAllDishes(String jwt) {
+        String restName = jwtService.extractRestName(jwt);
+        List<Dish> dishList = dishRepository.findAll(restName);
 
         List<DishResponseDTO> dishResponseDTOList = new ArrayList<>();
-        List<Ingredient> ingredientList = new ArrayList<>();
 
         for (Dish dish: dishList) {
             DishResponseDTO dishResponseDTO = dishMapper.entityToDto(dish);
@@ -83,13 +88,15 @@ public class DishServices {
         return dishResponseDTOList;
     }
 
-    public DishResponseDTO getDishById(Long id) throws DishException {
-        Dish dish = dishRepository.findById(id).orElseThrow(() -> new DishException("No dishes find with this id", 400));
+    public DishResponseDTO getDishById(Long id, String jwt) throws DishException {
+        String restName = jwtService.extractRestName(jwt);
+        Dish dish = dishRepository.findById(restName, id).orElseThrow(() -> new DishException("No dishes find with this id", 400));
         return dishMapper.entityToDto(dish);
     }
 
-    public DishResponseDTO updateDishById(Long id, DishRequestDTO dishRequestDTO) throws DishException {
-        Dish dish = dishRepository.findById(id).orElse(null);
+    public DishResponseDTO updateDishById(Long id, DishRequestDTO dishRequestDTO, String jwt) throws DishException {
+        String restName = jwtService.extractRestName(jwt);
+        Dish dish = dishRepository.findById(restName, id).orElse(null);
 
         if(dish == null) throw new DishException("No dishes retrieved with this id", 404);
 
@@ -113,8 +120,9 @@ public class DishServices {
         return dishMapper.entityToDto(saved);
     }
 
-    public DishResponseDTO deleteDishById(Long id) throws DishException {
-        Dish dish = dishRepository.findById(id).orElseThrow(() -> new DishException("Dish not found with this id", 404));
+    public DishResponseDTO deleteDishById(Long id, String jwt) throws DishException {
+        String restName = jwtService.extractRestName(jwt);
+        Dish dish = dishRepository.findById(restName, id).orElseThrow(() -> new DishException("Dish not found with this id", 404));
         dishRepository.deleteById(id);
 
         return dishMapper.entityToDto(dish);

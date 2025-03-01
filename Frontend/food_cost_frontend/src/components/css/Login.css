@@ -1,0 +1,109 @@
+body {
+    overflow: hidden;
+    margin: 0px;
+}
+
+#background {
+    background-color: #E8EDE8;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#container {
+    width: 20vw;
+    height: 60vh;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: black -2px 1px 20px;
+}
+
+
+
+#up_container {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#bottom_container {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#username_label{
+    width: 100%;
+    text-align: left;
+    padding-left: 20%;
+    font-size: 22px;
+}
+
+#logo {
+    width: 40%;
+    height: 90%;
+}
+
+
+#password_label{
+    width: 100%;
+    text-align: left;
+    padding-left: 20%;
+    font-size: 22px;
+}
+
+#usernameInput {
+    width: 80%;
+    height: 10%;
+    border: 0px;
+}
+
+#passwordInput {
+    width: 80%;
+    height: 10%;
+    border: 0px;
+    
+}
+
+#send_button {
+    width: 82%;
+    height: 10%;
+    background-color: orange;
+    border: 0px;
+}
+
+#wrongPass {
+    color: red;
+    font-size: larger;
+    margin: none;
+}
+
+@media (max-width: 1250px) {
+    #container {
+        width: 100vw;
+        height: 100vh;
+        background-color: white;
+        box-shadow: none;
+        border-radius: 0px;
+    }
+
+}

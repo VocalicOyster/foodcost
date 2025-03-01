@@ -1,6 +1,5 @@
 package com.personal.foodcost.filter;
 
-import com.personal.foodcost.config.SecurityConfiguration;
 import com.personal.foodcost.models.DTOs.MyUserDetailService;
 import com.personal.foodcost.services.JwtService;
 import jakarta.servlet.FilterChain;
@@ -31,14 +30,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
-            if(Objects.equals(request.getRequestURI(), "/auth/login")) {
+            if(Objects.equals(request.getRequestURI(), "/auth/login") || Objects.equals(request.getRequestURI(), "/api/user")) {
                 filterChain.doFilter(request, response);
                 return;
             }
+
             String jwt = parseJwt(request);
 
-
             if (jwt == null && !Objects.equals(request.getRequestURI(), "/auth/login")) {
+                System.out.println(request.getRequestURI());
                 response.setStatus(403);
                 response.setContentType("application/json");
                 response.getWriter().write("Auth Error: MISSING TOKEN");
@@ -67,7 +67,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
     }
 
-    private String parseJwt(HttpServletRequest request) {
+    public String parseJwt(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
 
         if(authHeader != null && authHeader.startsWith("Bearer ")) {

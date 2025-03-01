@@ -1,0 +1,13 @@
+#mainMenuContainer {
+    width: 100%;
+    height: 100vh;
+    background-color: gray;
+    display: flex;
+    padding-left: 6%;
+}
+
+#internaleContainer {
+    width: 92%;
+    height: 100%;
+    background-color: brown;
+}

@@ -26,8 +26,12 @@ public class RawMaterialService {
     @Autowired
     private RawMaterialMapper rawMaterialMapper;
 
-    public List<RawMaterialResponseDTO> getAllRaw() {
-        List<RawMaterial> rawMaterialList = rawMaterialRepository.findAll();
+    @Autowired
+    private JwtService jwtService;
+
+    public List<RawMaterialResponseDTO> getAllRaw(String jwt) {
+        String restName = jwtService.extractRestName(jwt);
+        List<RawMaterial> rawMaterialList = rawMaterialRepository.findAll(restName);
         List<RawMaterialResponseDTO> rawMaterialResponseDTOList = new ArrayList<>();
 
         for(RawMaterial rawMaterial: rawMaterialList) {
@@ -37,17 +41,20 @@ public class RawMaterialService {
         return rawMaterialResponseDTOList;
     }
 
-    public RawMaterialResponseDTO getRawById(Long id) throws RawMaterialException {
-        RawMaterial rawMaterial = rawMaterialRepository.findById(id).orElseThrow(() -> new RawMaterialException("Raw material not found with this id", 404));
+    public RawMaterialResponseDTO getRawById(Long id, String jwt) throws RawMaterialException {
+        String restName = jwtService.extractRestName(jwt);
+        RawMaterial rawMaterial = rawMaterialRepository.findById(id, restName).orElseThrow(() -> new RawMaterialException("Raw material not found with this id", 404));
 
         return rawMaterialMapper.entityToDto(rawMaterial);
     }
 
-    public RawMaterialResponseDTO insertRaw(RawMaterialRequestDTO rawMaterialRequestDTO) throws RawMaterialException {
 
+    public RawMaterialResponseDTO insertRaw(RawMaterialRequestDTO rawMaterialRequestDTO, String jwt) throws RawMaterialException {
+        String restName = jwtService.extractRestName(jwt);
         try {
-            rawMaterialValidator.isRawMaterialValid(rawMaterialRequestDTO);
+            rawMaterialValidator.isRawMaterialValid(rawMaterialRequestDTO, restName);
             RawMaterial rawMaterial = rawMaterialMapper.dtoToEntity(rawMaterialRequestDTO);
+            rawMaterial.setRestName(restName);
             RawMaterial saved = rawMaterialRepository.saveAndFlush(rawMaterial);
             return rawMaterialMapper.entityToDto(saved);
         } catch (RawMaterialException e) {
@@ -56,10 +63,12 @@ public class RawMaterialService {
 
     }
 
-    public RawMaterialResponseDTO updateById(Long id, RawMaterialRequestDTO rawMaterialRequestDTO) throws RawMaterialException {
+    public RawMaterialResponseDTO updateById(Long id, RawMaterialRequestDTO rawMaterialRequestDTO, String jwt) throws RawMaterialException {
+
+        String restName = jwtService.extractRestName(jwt);
         try {
-            rawMaterialValidator.isRawMaterialValid(rawMaterialRequestDTO);
-            RawMaterial rawMaterial = rawMaterialRepository.findById(id).orElseThrow(() -> new RawMaterialException("No raw material found with this id", 404));
+            rawMaterialValidator.isRawMaterialValid(rawMaterialRequestDTO, restName);
+            RawMaterial rawMaterial = rawMaterialRepository.findById(id, restName).orElseThrow(() -> new RawMaterialException("No raw material found with this id", 404));
 
             rawMaterial.setName(rawMaterialRequestDTO.getName());
             rawMaterial.setVendor(rawMaterialRequestDTO.getVendor());
@@ -74,8 +83,9 @@ public class RawMaterialService {
         }
     }
 
-    public RawMaterialResponseDTO deleteById(Long id) throws RawMaterialException {
-        RawMaterial rawMaterial = rawMaterialRepository.findById(id).orElseThrow(() -> new RawMaterialException("No Raw Material found with this id!", 404));
+    public RawMaterialResponseDTO deleteById(Long id, String jwt) throws RawMaterialException {
+        String restName = jwtService.extractRestName(jwt);
+        RawMaterial rawMaterial = rawMaterialRepository.findById(id, restName).orElseThrow(() -> new RawMaterialException("No Raw Material found with this id!", 404));
 
         rawMaterialRepository.deleteById(id);
 

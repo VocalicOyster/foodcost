@@ -8,7 +8,6 @@ import com.personal.foodcost.models.DTOs.response_dto.UserResponseDTO;
 import com.personal.foodcost.repositories.UserRepository;
 import com.personal.foodcost.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,9 +52,10 @@ public class UserService {
             userValidator.isUserValid(userRequestDTO);
             MyUser myUser = userMapper.dtoToEntity(userRequestDTO);
             myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
+            myUser.setFirstLogin(true);
             MyUser saved = userRepository.saveAndFlush(myUser);
 
-            return userMapper.entityToDto(myUser);
+            return userMapper.entityToDto(saved);
 
         } catch (UserException e) {
             throw new UserException(e.getMessage(), e.getStatusCode());

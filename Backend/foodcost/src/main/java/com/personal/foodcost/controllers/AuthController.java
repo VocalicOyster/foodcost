@@ -40,25 +40,28 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Response> authAndGetToken(@RequestBody LoginForm loginForm) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginForm.username(), loginForm.password()
-        ));
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginForm.username(), loginForm.password()
+            ));
 
-        if (authentication.isAuthenticated()) {
-            return ResponseEntity.ok().body(
-                    new ResponseValid(
-                            200,
-                            "Authenticated!",
-                            "Token: " + jwtService.generateToken(myUserDetailService.loadUserByUsername(loginForm.username()))
+            String jwt = jwtService.generateToken(myUserDetailService.loadUserByUsername(loginForm.username()));
+                return ResponseEntity.ok().body(
+                        new ResponseValid(
+                                200,
+                                "Authenticated!",
+                                jwt
+                        )
+                );
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(
+                    new ResponseInvalid(
+                            404,
+                            e.getMessage()
                     )
             );
         }
-        return ResponseEntity.status(404).body(
-                new ResponseInvalid(
-                        404,
-                        "No user found with this username"
-                )
-        );
     }
 
     @PostMapping("/ownerRes")

@@ -22,6 +22,16 @@ public class Ingredient {
     @Column
     private Float quantity;
 
+    @Column
+    private String restName;
+
+    public String getRestName() {
+        return restName;
+    }
+
+    public void setRestName(String restName) {
+        this.restName = restName;
+    }
 
     public Long getId() {
         return id;

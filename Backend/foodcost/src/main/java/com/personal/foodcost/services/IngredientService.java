@@ -25,8 +25,12 @@ public class IngredientService {
     @Autowired
     private IngredientValidator ingredientValidator;
 
-    public List<IngredientResponseDTO> getAllIngredients() {
-        List<Ingredient> ingredientList = ingredientRepository.findAll();
+    @Autowired
+    private JwtService jwtService;
+
+    public List<IngredientResponseDTO> getAllIngredients(String jwt) {
+        String restName = jwtService.extractRestName(jwt);
+        List<Ingredient> ingredientList = ingredientRepository.findAll(restName);
         List<IngredientResponseDTO> ingredientResponseDTOList = new ArrayList<>();
 
         for(Ingredient ingredient: ingredientList) {
@@ -36,15 +40,18 @@ public class IngredientService {
         return ingredientResponseDTOList;
     }
 
-    public IngredientResponseDTO getIngredientById(Long id) throws IngredientException {
-        Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(() -> new IngredientException("No ingredient found with this id", 404));
+    public IngredientResponseDTO getIngredientById(Long id, String jwt) throws IngredientException {
+        String restName = jwtService.extractRestName(jwt);
+        Ingredient ingredient = ingredientRepository.findById(id, restName).orElseThrow(() -> new IngredientException("No ingredient found with this id", 404));
         return ingredientMapper.entityToDto(ingredient);
     }
 
-    public IngredientResponseDTO insertIngredient(IngredientRequestDTO ingredientRequestDTO) throws IngredientException {
+    public IngredientResponseDTO insertIngredient(IngredientRequestDTO ingredientRequestDTO, String jwt) throws IngredientException {
+        String restName = jwtService.extractRestName(jwt);
         try {
             ingredientValidator.isRawMaterialPerDishValid(ingredientRequestDTO);
             Ingredient ingredient = ingredientMapper.dtoToEntity(ingredientRequestDTO);
+            ingredient.setRestName(restName);
             ingredientRepository.saveAndFlush(ingredient);
             return ingredientMapper.entityToDto(ingredient);
 
@@ -53,10 +60,12 @@ public class IngredientService {
         }
     }
 
-    public IngredientResponseDTO updateIngredientById(Long id, IngredientRequestDTO ingredientRequestDTO) throws IngredientException {
+    public IngredientResponseDTO updateIngredientById(Long id, IngredientRequestDTO ingredientRequestDTO, String jwt) throws IngredientException {
+        String restName = jwtService.extractRestName(jwt);
+
         try {
             ingredientValidator.isRawMaterialPerDishValid(ingredientRequestDTO);
-            Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(() -> new IngredientException("No ingredient found with this id", 404));
+            Ingredient ingredient = ingredientRepository.findById(id, restName).orElseThrow(() -> new IngredientException("No ingredient found with this id", 404));
             ingredient.setQuantity(ingredientRequestDTO.getQuantity());
             ingredient.setRawMaterial(ingredientRequestDTO.getRawMaterial());
 
@@ -67,8 +76,9 @@ public class IngredientService {
         }
     }
 
-    public IngredientResponseDTO deleteIngredientById(Long id) throws IngredientException {
-        Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(() -> new IngredientException("Ingredient not found with this id", 404));
+    public IngredientResponseDTO deleteIngredientById(Long id, String jwt) throws IngredientException {
+        String restName = jwtService.extractRestName(jwt);
+        Ingredient ingredient = ingredientRepository.findById(id, restName).orElseThrow(() -> new IngredientException("Ingredient not found with this id", 404));
         ingredientRepository.deleteById(id);
         return ingredientMapper.entityToDto(ingredient);
     }

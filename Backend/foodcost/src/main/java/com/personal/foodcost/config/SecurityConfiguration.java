@@ -13,13 +13,16 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +36,17 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:5173")); // Permette il frontend React
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(List.of("*"));
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
                 .authorizeHttpRequests(registry -> {
+                    registry.requestMatchers("/auth/login").permitAll();
+
                     registry.requestMatchers("/api/user/**").hasRole(ROLES.ADMIN.toString());
                     registry.requestMatchers("/auth/restaurantRes").hasRole(ROLES.ADMIN.toString());
                     registry.requestMatchers("/auth/ownerRes").hasRole(ROLES.ADMIN.toString());
@@ -73,7 +86,7 @@ public class SecurityConfiguration {
                     registry.requestMatchers("/api/raw/**")
                             .hasAnyRole(ROLES.ADMIN.toString(), ROLES.OWNER.toString());
 
-                    registry.requestMatchers("/auth/login").permitAll();
+
                 })
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler((request, response, accessDeniedException) ->
@@ -82,7 +95,7 @@ public class SecurityConfiguration {
                             response.setContentType("application/json");
                             response.getWriter().write("You do not have enough permission to access this endpoint");
                         }))
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
